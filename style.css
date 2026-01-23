@@ -1,0 +1,537 @@
+/* ==================== CSS Variables ==================== */
+:root {
+    /* Colors */
+    --color-primary: hsl(250, 84%, 54%);
+    --color-primary-light: hsl(250, 84%, 64%);
+    --color-primary-dark: hsl(250, 84%, 44%);
+    --color-secondary: hsl(280, 84%, 54%);
+    --color-accent: hsl(320, 84%, 54%);
+    
+    --color-bg-dark: hsl(240, 20%, 8%);
+    --color-bg-darker: hsl(240, 20%, 5%);
+    --color-surface: hsl(240, 15%, 12%);
+    --color-surface-light: hsl(240, 15%, 18%);
+    
+    --color-text-primary: hsl(0, 0%, 98%);
+    --color-text-secondary: hsl(0, 0%, 75%);
+    --color-text-muted: hsl(0, 0%, 55%);
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-accent) 100%);
+    --gradient-surface: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-light) 100%);
+    --gradient-glow: radial-gradient(circle at center, var(--color-primary) 0%, transparent 70%);
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
+    
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --spacing-2xl: 4rem;
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-base: 300ms ease;
+    --transition-slow: 500ms ease;
+}
+
+/* ==================== Reset & Base ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    background: var(--color-bg-dark);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* ==================== Animated Background ==================== */
+.stars,
+.stars2,
+.stars3 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.stars {
+    background: transparent url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2"><circle cx="1" cy="1" r="1" fill="white" opacity="0.3"/></svg>') repeat;
+    animation: animateStars 100s linear infinite;
+}
+
+.stars2 {
+    background: transparent url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="3" height="3"><circle cx="1.5" cy="1.5" r="1.5" fill="white" opacity="0.2"/></svg>') repeat;
+    animation: animateStars 150s linear infinite;
+}
+
+.stars3 {
+    background: transparent url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><circle cx="2" cy="2" r="2" fill="white" opacity="0.1"/></svg>') repeat;
+    animation: animateStars 200s linear infinite;
+}
+
+@keyframes animateStars {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-2000px);
+    }
+}
+
+/* ==================== Container ==================== */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+    position: relative;
+    z-index: 1;
+}
+
+/* ==================== Header ==================== */
+.header {
+    margin-bottom: var(--spacing-2xl);
+    animation: fadeInDown 0.8s ease;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--gradient-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(10px);
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.logo-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-glow);
+    animation: float 3s ease-in-out infinite;
+}
+
+.logo-icon svg {
+    width: 36px;
+    height: 36px;
+    color: white;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.logo-text h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.25rem;
+}
+
+.subtitle {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.btn-github {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all var(--transition-base);
+}
+
+.btn-github:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-github svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ==================== Main Content ==================== */
+.main-content {
+    animation: fadeIn 1s ease;
+}
+
+.intro-section {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: var(--spacing-md);
+}
+
+.title-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.intro-text {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* ==================== Apps Grid ==================== */
+.apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.app-card {
+    position: relative;
+    background: var(--gradient-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    transition: all var(--transition-base);
+    animation: fadeInUp 0.8s ease;
+}
+
+.app-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.app-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.card-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: var(--gradient-glow);
+    opacity: 0;
+    transition: opacity var(--transition-slow);
+    pointer-events: none;
+}
+
+.app-card:hover .card-glow {
+    opacity: 0.15;
+}
+
+.card-content {
+    position: relative;
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.app-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-sm);
+    box-shadow: var(--shadow-md);
+}
+
+.app-icon svg {
+    width: 48px;
+    height: 48px;
+    color: white;
+}
+
+.timetable-icon {
+    background: linear-gradient(135deg, hsl(200, 84%, 54%) 0%, hsl(220, 84%, 54%) 100%);
+}
+
+.edinet-icon {
+    background: linear-gradient(135deg, hsl(160, 84%, 44%) 0%, hsl(180, 84%, 54%) 100%);
+}
+
+.app-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+}
+
+.app-description {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: var(--spacing-sm);
+}
+
+.app-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+.tag {
+    padding: 0.4rem 0.9rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.tag:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-primary);
+}
+
+.card-footer {
+    margin-top: auto;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: 1rem 2rem;
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: var(--radius-md);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.btn-primary svg {
+    width: 20px;
+    height: 20px;
+    transition: transform var(--transition-base);
+}
+
+.btn-primary:hover svg {
+    transform: translateX(4px);
+}
+
+/* ==================== Stats Section ==================== */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+    animation: fadeInUp 1s ease 0.4s backwards;
+}
+
+.stat-card {
+    text-align: center;
+    padding: var(--spacing-xl);
+    background: var(--gradient-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all var(--transition-base);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* ==================== Footer ==================== */
+.footer {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-text-muted);
+    animation: fadeIn 1.2s ease;
+}
+
+.footer p {
+    margin-bottom: var(--spacing-xs);
+}
+
+.footer-note {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+/* ==================== Animations ==================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-md);
+    }
+    
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .logo-section {
+        flex-direction: column;
+    }
+    
+    .logo-text h1 {
+        font-size: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .apps-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .app-card {
+        min-width: unset;
+    }
+    
+    .card-content {
+        padding: var(--spacing-lg);
+    }
+    
+    .app-icon {
+        width: 64px;
+        height: 64px;
+    }
+    
+    .app-icon svg {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .app-title {
+        font-size: 1.5rem;
+    }
+}
