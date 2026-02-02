@@ -247,8 +247,8 @@ body {
 /* ==================== Apps Grid ==================== */
 .apps-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    gap: var(--spacing-xl);
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
     margin-bottom: var(--spacing-2xl);
 }
 
