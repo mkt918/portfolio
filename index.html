@@ -4,345 +4,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mkt918's Web Apps - ポートフォリオ</title>
-    <meta name="description" content="mkt918が開発したWebアプリケーションのポータルサイト。時間割管理システムやEDINET監視ツールなど、実用的なアプリケーションを公開しています。">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>mkt918's Web Apps</title>
+    <meta name="description" content="mkt918が開発したWebアプリケーションのポータルサイト。">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Noto+Sans+JP:wght@300;400;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+    </style>
 </head>
 
-<body>
-    <div class="stars"></div>
-    <div class="stars2"></div>
-    <div class="stars3"></div>
+<body class="bg-gray-50 text-slate-800 h-screen w-screen overflow-hidden flex flex-col">
 
-    <div class="container">
-        <header class="header">
-            <div class="header-content">
-                <div class="logo-section">
-                    <div class="logo-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <div class="logo-text">
-                        <h1>mkt918's Web Apps</h1>
-                        <p class="subtitle">実用的なWebアプリケーション集</p>
-                    </div>
-                </div>
-                <div class="github-link">
-                    <a href="https://github.com/mkt918" target="_blank" rel="noopener noreferrer" class="btn-github">
-                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                        </svg>
-                        GitHub
-                    </a>
-                </div>
+    <!-- Header -->
+    <header
+        class="bg-white border-b border-gray-200 px-6 py-3 flex justify-between items-center shadow-sm shrink-0 z-10">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-md">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
             </div>
-        </header>
+            <div>
+                <h1
+                    class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                    mkt918's Web Apps</h1>
+                <p class="text-xs text-slate-500">Premium Tool Collection</p>
+            </div>
+        </div>
+        <a href="https://github.com/mkt918" target="_blank" rel="noopener noreferrer"
+            class="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition text-sm font-medium">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+            </svg>
+            GitHub
+        </a>
+    </header>
 
-        <main class="main-content">
-            <section class="intro-section">
-                <h2 class="section-title">
-                    <span class="title-gradient">開発したアプリケーション</span>
-                </h2>
-                <p class="intro-text">
-                    実務で役立つWebアプリケーションを開発・公開しています。<br>
-                    各アプリケーションは最新の技術スタックで構築されています。
+    <!-- Main Content Grid -->
+    <main class="flex-1 p-6 overflow-hidden relative">
+        <div class="h-full grid grid-cols-4 gap-4 content-start">
+
+            <!-- App Card 1: Timetable -->
+            <a href="https://mkt918.github.io/timetable-kun-v1/" target="_blank"
+                class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-indigo-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+                <div class="flex items-start justify-between mb-3">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white shadow-md">
+                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <span
+                        class="px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-full uppercase tracking-wide">Education</span>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg mb-1 group-hover:text-indigo-600 transition-colors">時間割くん
+                </h3>
+                <p class="text-slate-500 text-sm leading-relaxed flex-1 line-clamp-3">教員・クラス時間割リンクシステム。授業、特別教室、会議を一元管理。
                 </p>
-            </section>
+            </a>
 
-            <section class="apps-grid">
-                <article class="app-card" data-app="timetable">
-                    <div class="card-glow"></div>
-                    <div class="card-content">
-                        <div class="app-icon timetable-icon">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor"
-                                    stroke-width="2" />
-                                <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2" />
-                                <line x1="8" y1="4" x2="8" y2="22" stroke="currentColor" stroke-width="2" />
-                                <circle cx="14" cy="14" r="2" fill="currentColor" />
-                            </svg>
-                        </div>
-                        <div class="app-info">
-                            <h3 class="app-title">時間割くん</h3>
-                            <p class="app-description">
-                                教員・クラス時間割リンクシステム。教員の担当授業、特別教室、会議・業務を一元管理し、効率的なスケジュール作成をサポートします。
-                            </p>
-                            <div class="app-tags">
-                                <span class="tag">教育</span>
-                                <span class="tag">スケジュール管理</span>
-                                <span class="tag">CSV対応</span>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <a href="https://mkt918.github.io/timetable-kun-v1/" target="_blank"
-                                rel="noopener noreferrer" class="btn-primary">
-                                <span>アプリを開く</span>
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </a>
-                        </div>
+            <!-- App Card 2: EDINET Monitor -->
+            <a href="https://edinet-monitor.vercel.app/" target="_blank"
+                class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-emerald-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+                <div class="flex items-start justify-between mb-3">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white shadow-md">
+                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
                     </div>
-                </article>
-
-                <article class="app-card" data-app="edinet">
-                    <div class="card-glow"></div>
-                    <div class="card-content">
-                        <div class="app-icon edinet-icon">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3 3v18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M18 9l-5 5-3-3-4 4" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                                <circle cx="18" cy="9" r="2" fill="currentColor" />
-                            </svg>
-                        </div>
-                        <div class="app-info">
-                            <h3 class="app-title">EDINET Monitor</h3>
-                            <p class="app-description">
-                                大量保有報告書モニタリングツール。EDINETから大量保有報告書を取得・分析し、企業の株主構成変化をリアルタイムで追跡できます。
-                            </p>
-                            <div class="app-tags">
-                                <span class="tag">金融</span>
-                                <span class="tag">データ分析</span>
-                                <span class="tag">リアルタイム</span>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <a href="https://edinet-monitor.vercel.app/" target="_blank" rel="noopener noreferrer"
-                                class="btn-primary">
-                                <span>アプリを開く</span>
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="app-card" data-app="teacher">
-                    <div class="card-glow"></div>
-                    <div class="card-content">
-                        <div class="app-icon teacher-icon">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 14l9-5-9-5-9 5 9 5z" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                                <path
-                                    d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M12 14v7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="app-info">
-                            <h3 class="app-title">教員業務支援アプリ</h3>
-                            <p class="app-description">
-                                担任業務を効率化する総合支援ツール。席替え、グループ分け、保護者会スケジュール、出欠管理など、教員の日常業務をサポートします。
-                            </p>
-                            <div class="app-tags">
-                                <span class="tag">教育</span>
-                                <span class="tag">業務効率化</span>
-                                <span class="tag">クラス管理</span>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <a href="https://mkt918.github.io/Teacher/#dashboard" target="_blank"
-                                rel="noopener noreferrer" class="btn-primary">
-                                <span>アプリを開く</span>
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="app-card" data-app="typing">
-                    <div class="card-glow"></div>
-                    <div class="card-content">
-                        <div class="app-icon typing-icon">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M22 4L12 14.01l-3-3" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="app-info">
-                            <h3 class="app-title">Sushi Typer Factory</h3>
-                            <p class="app-description">
-                                寿司をタイピングで生産する放置型工場ゲーム。タイピング速度を上げて工場をアップグレードし、世界一の寿司工場を目指しましょう。
-                            </p>
-                            <div class="app-tags">
-                                <span class="tag">ゲーム</span>
-                                <span class="tag">タイピング</span>
-                                <span class="tag">放置系</span>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <a href="https://mkt918.github.io/typing01/" target="_blank" rel="noopener noreferrer"
-                                class="btn-primary">
-                                <span>アプリを開く</span>
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="app-card" data-app="typing03">
-                    <div class="card-glow"></div>
-                    <div class="card-content">
-                        <div class="app-icon typing03-icon">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="app-info">
-                            <h3 class="app-title">全商検定対応タイピング練習</h3>
-                            <p class="app-description">
-                                全商情報処理検定等の実務検定に準拠したタイピング練習ツール。正確さと速度を追求し、検定合格を目指す受験者をサポートします。
-                            </p>
-                            <div class="app-tags">
-                                <span class="tag">検定対策</span>
-                                <span class="tag">タイピング</span>
-                                <span class="tag">実務</span>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <a href="https://mkt918.github.io/typing03/" target="_blank" rel="noopener noreferrer"
-                                class="btn-primary">
-                                <span>アプリを開く</span>
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="app-card" data-app="quiz">
-                    <div class="card-glow"></div>
-                    <div class="card-content">
-                        <div class="app-icon quiz-icon">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                                <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                                <line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="app-info">
-                            <h3 class="app-title">情報処理ミリオネア</h3>
-                            <p class="app-description">
-                                4択クイズに答えて100万ドルを目指すクイズゲーム。オーディエンスやフィフティ・フィフティなどのお助け機能を駆使して全問正解を狙いましょう。
-                            </p>
-                            <div class="app-tags">
-                                <span class="tag">ゲーム</span>
-                                <span class="tag">クイズ</span>
-                                <span class="tag">エンタメ</span>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <a href="https://mkt918.github.io/quizmillion/" target="_blank" rel="noopener noreferrer"
-                                class="btn-primary">
-                                <span>アプリを開く</span>
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="app-card" data-app="portal">
-                    <div class="card-glow"></div>
-                    <div class="card-content">
-                        <div class="app-icon portal-icon">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="app-info">
-                            <h3 class="app-title">クラスポータル - 学習支援サイト</h3>
-                            <p class="app-description">
-                                授業資料や学習ツール、授業記録をまとめたクラス専用ポータルサイト。学びをよりクリエイティブにするための総合プラットフォームです。
-                            </p>
-                            <div class="app-tags">
-                                <span class="tag">教育</span>
-                                <span class="tag">学習支援</span>
-                                <span class="tag">ポータル</span>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <a href="https://mkt918.github.io/01_mainportal/index.html#tools-section" target="_blank"
-                                rel="noopener noreferrer" class="btn-primary">
-                                <span>アプリを開く</span>
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </article>
-            </section>
-
-            <section class="stats-section">
-                <div class="stat-card">
-                    <div class="stat-number">7</div>
-                    <div class="stat-label">公開アプリ</div>
+                    <span
+                        class="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-full uppercase tracking-wide">Finance</span>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">無料</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">24/7</div>
-                    <div class="stat-label">利用可能</div>
-                </div>
-            </section>
-        </main>
+                <h3 class="font-bold text-slate-800 text-lg mb-1 group-hover:text-emerald-600 transition-colors">EDINET
+                    Monitor</h3>
+                <p class="text-slate-500 text-sm leading-relaxed flex-1 line-clamp-3">大量保有報告書モニタリング。企業の株主構成変化をリアルタイム追跡。
+                </p>
+            </a>
 
-        <footer class="footer">
-            <p>&copy; 2026 mkt918. All rights reserved.</p>
-            <p class="footer-note">Made with ❤️ and modern web technologies</p>
-        </footer>
-    </div>
+            <!-- App Card 3: Teacher Tool -->
+            <a href="https://mkt918.github.io/Teacher/#dashboard" target="_blank"
+                class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-purple-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+                <div class="flex items-start justify-between mb-3">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-400 to-indigo-600 flex items-center justify-center text-white shadow-md">
+                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </div>
+                    <span
+                        class="px-2 py-0.5 bg-purple-50 text-purple-700 text-[10px] font-bold rounded-full uppercase tracking-wide">Education</span>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg mb-1 group-hover:text-purple-600 transition-colors">
+                    教員業務支援アプリ</h3>
+                <p class="text-slate-500 text-sm leading-relaxed flex-1 line-clamp-3">担任業務効率化。席替え、グループ分け、出欠管理などをサポート。
+                </p>
+            </a>
 
-    <script src="script.js"></script>
+            <!-- App Card 4: Sushi Typer -->
+            <a href="https://mkt918.github.io/typing01/" target="_blank"
+                class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-orange-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+                <div class="flex items-start justify-between mb-3">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white shadow-md">
+                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                        </svg>
+                    </div>
+                    <span
+                        class="px-2 py-0.5 bg-orange-50 text-orange-700 text-[10px] font-bold rounded-full uppercase tracking-wide">Game</span>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg mb-1 group-hover:text-orange-600 transition-colors">Sushi
+                    Typer</h3>
+                <p class="text-slate-500 text-sm leading-relaxed flex-1 line-clamp-3">寿司生産工場放置ゲーム。タイピングで工場を拡張し世界一を目指す。
+                </p>
+            </a>
+
+            <!-- App Card 5: Zensho Typing -->
+            <a href="https://mkt918.github.io/typing03/" target="_blank"
+                class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-cyan-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+                <div class="flex items-start justify-between mb-3">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white shadow-md">
+                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <span
+                        class="px-2 py-0.5 bg-cyan-50 text-cyan-700 text-[10px] font-bold rounded-full uppercase tracking-wide">Training</span>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg mb-1 group-hover:text-cyan-600 transition-colors">全商検定タイピング
+                </h3>
+                <p class="text-slate-500 text-sm leading-relaxed flex-1 line-clamp-3">情報処理検定等の実務検定準拠。正確さと速度を追求する練習ツール。
+                </p>
+            </a>
+
+            <!-- App Card 6: Quiz Millionaire -->
+            <a href="https://mkt918.github.io/quizmillion/" target="_blank"
+                class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-amber-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+                <div class="flex items-start justify-between mb-3">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-gradient-to-br from-amber-400 to-yellow-600 flex items-center justify-center text-white shadow-md">
+                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <span
+                        class="px-2 py-0.5 bg-amber-50 text-amber-700 text-[10px] font-bold rounded-full uppercase tracking-wide">Quiz</span>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg mb-1 group-hover:text-amber-600 transition-colors">情報処理ミリオネア
+                </h3>
+                <p class="text-slate-500 text-sm leading-relaxed flex-1 line-clamp-3">4択クイズで100万ドルを目指せ。オーディエンス機能付きクイズ。
+                </p>
+            </a>
+
+            <!-- App Card 7: Class Portal -->
+            <a href="https://mkt918.github.io/01_mainportal/index.html#tools-section" target="_blank"
+                class="group bg-white border border-gray-200 rounded-xl p-4 hover:border-green-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+                <div class="flex items-start justify-between mb-3">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white shadow-md">
+                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <span
+                        class="px-2 py-0.5 bg-green-50 text-green-700 text-[10px] font-bold rounded-full uppercase tracking-wide">Portal</span>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg mb-1 group-hover:text-green-600 transition-colors">クラスポータル
+                </h3>
+                <p class="text-slate-500 text-sm leading-relaxed flex-1 line-clamp-3">授業資料、学習ツール、記録をまとめたクラス専用学習支援サイト。
+                </p>
+            </a>
+
+            <!-- Placeholder for layout balance (optional) -->
+            <div
+                class="rounded-xl border border-dashed border-gray-200 bg-gray-50 flex flex-col items-center justify-center text-gray-400 p-4 opacity-50">
+                <span class="text-sm font-medium">More to come...</span>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Compact Footer / Stats -->
+    <footer
+        class="bg-white border-t border-gray-200 px-6 py-2 shrink-0 flex justify-between items-center text-xs text-slate-500">
+        <div class="flex gap-6">
+            <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                <span>Active Apps: <strong class="text-slate-700">7</strong></span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                <span>Free: <strong class="text-slate-700">100%</strong></span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                <span>Uptime: <strong class="text-slate-700">24/7</strong></span>
+            </div>
+        </div>
+        <div>
+            &copy; 2026 mkt918. Made with Tailwind CSS.
+        </div>
+    </footer>
+
 </body>
 
 </html>
