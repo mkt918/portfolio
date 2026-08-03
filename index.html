@@ -17,9 +17,19 @@
             transform: translateY(-3px);
             box-shadow: 0 12px 32px -8px rgba(0,0,0,0.12), 0 4px 12px -4px rgba(0,0,0,0.06);
         }
+        .card-hover.dragging {
+            opacity: 0.5;
+        }
+        .card-hover.drag-over {
+            transform: scale(0.98);
+            border-color: #6366f1 !important;
+        }
         .search-input:focus { outline: none; }
         .section-hidden { display: none; }
         .pin-icon { color: #f59e0b; }
+        .card-menu { display: none; }
+        .card-hover:hover .card-menu { display: block; }
+        .group-toggle { cursor: pointer; }
     </style>
 </head>
 
@@ -39,7 +49,7 @@
                 </div>
                 <div>
                     <h1 class="text-base font-bold text-slate-800 leading-none">mkt918's Web Apps</h1>
-                    <p class="text-[11px] text-slate-400 mt-0.5">31 tools &amp; games</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5"><span id="appCount">31</span> tools &amp; games</p>
                 </div>
             </div>
 
@@ -53,14 +63,20 @@
                 </div>
             </div>
 
-            <!-- GitHub -->
-            <a href="https://github.com/mkt918" target="_blank" rel="noopener noreferrer"
-                class="shrink-0 flex items-center gap-1.5 px-3 py-2 text-slate-500 hover:text-slate-800 hover:bg-gray-50 rounded-lg transition-all text-sm font-medium border border-transparent hover:border-gray-200">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                GitHub
-            </a>
+            <!-- Controls -->
+            <div class="flex items-center gap-2 shrink-0">
+                <button id="editBtn" class="flex items-center gap-1.5 px-3 py-2 text-slate-500 hover:text-slate-800 hover:bg-gray-50 rounded-lg transition-all text-sm font-medium border border-transparent hover:border-gray-200" title="編集モード">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    編集
+                </button>
+                <a href="https://github.com/mkt918" target="_blank" rel="noopener noreferrer"
+                    class="shrink-0 flex items-center gap-1.5 px-3 py-2 text-slate-500 hover:text-slate-800 hover:bg-gray-50 rounded-lg transition-all text-sm font-medium border border-transparent hover:border-gray-200">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
         </div>
     </header>
 
@@ -68,440 +84,656 @@
     <main class="flex-1 overflow-y-auto bg-gray-50/50" id="mainContent">
         <div class="max-w-7xl mx-auto px-6 py-5" id="allSections">
 
-        <!-- よく使う -->
-        <section class="mb-7" data-section>
-            <div class="flex items-center gap-2 mb-3">
-                <span class="text-amber-400 text-base">★</span>
-                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">よく使う</h2>
+        <!-- Favorites (pinned) -->
+        <section id="favoriteSection" class="mb-7 hidden" data-section="favorites">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-amber-400 text-base">★</span>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">お気に入り</h2>
+                </div>
+                <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="favorites">表示</button>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="favorites"></div>
+        </section>
 
-                <a href="https://mkt918.github.io/Teacher/#dashboard" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="教員業務支援アプリ">
+        <!-- よく使う -->
+        <section class="mb-7" data-section="よく使う">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-amber-400 text-base">★</span>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">よく使う</h2>
+                </div>
+                <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="よく使う">表示</button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="よく使う">
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="教員業務支援アプリ" data-section="よく使う" data-url="https://mkt918.github.io/Teacher/#dashboard">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #a78bfa, #6366f1)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-50 text-purple-500">Education</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-50 text-purple-500">Education</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-indigo-600 transition-colors">教員業務支援アプリ</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">教員業務支援アプリ</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">担任業務効率化。席替え、グループ分け、出欠管理などをサポート。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/04_manual/#list" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="Manual Hub">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="Manual Hub" data-section="よく使う" data-url="https://mkt918.github.io/04_manual/#list">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #60a5fa, #3b82f6)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-500">Document</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-500">Document</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-blue-600 transition-colors">Manual Hub</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">Manual Hub</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">ICT活用や業務効率化に役立つプレミアムマニュアルのアーカイブ。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/kaken01_system/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="プログラミング学習ポータル">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="プログラミング学習ポータル" data-section="よく使う" data-url="https://mkt918.github.io/kaken01_system/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #c084fc, #a855f7)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-violet-50 text-violet-500">Programming</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-violet-50 text-violet-500">Programming</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-violet-600 transition-colors">プログラミング学習ポータル</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">プログラミング学習ポータル</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">基礎からしっかり学ぶ、約7ヶ月間の本格カリキュラム。</p>
-                </a>
+                </div>
 
             </div>
         </section>
 
         <!-- ゲーム -->
-        <section class="mb-7" data-section>
-            <div class="flex items-center gap-2 mb-3">
-                <div class="w-1.5 h-4 rounded-full bg-amber-400"></div>
-                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">ゲーム</h2>
+        <section class="mb-7" data-section="ゲーム">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-4 rounded-full bg-amber-400"></div>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">ゲーム</h2>
+                </div>
+                <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="ゲーム">表示</button>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="ゲーム">
 
-                <a href="https://mkt918.github.io/01bikomi_shokui/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="職位並び替えクイズ">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="職位並び替えクイズ" data-section="ゲーム" data-url="https://mkt918.github.io/01bikomi_shokui/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fbbf24, #f59e0b)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Game</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Game</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-amber-600 transition-colors">職位並び替えクイズ</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">職位並び替えクイズ</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">職位の順序を正しく並び替えて昇格を目指せ。ルーレットで知識を試す。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/050_citychase/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="シティチェイス">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="シティチェイス" data-section="ゲーム" data-url="https://mkt918.github.io/050_citychase/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #475569, #1e3a5f)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">Game</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">Game</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-slate-600 transition-colors">シティチェイス</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">シティチェイス</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">警察vs犯人の頭脳戦ボードゲーム。ヘリコプターとパトカーで追い詰めろ。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/046_kirin2/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="キリンメーター">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="キリンメーター" data-section="ゲーム" data-url="https://mkt918.github.io/046_kirin2/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fb923c, #f97316)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-50 text-orange-500">Game</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-50 text-orange-500">Game</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-orange-600 transition-colors">キリンメーター</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">キリンメーター</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">事象の「大きさ」を比較し、最大・最小を当てる直感センスゲーム。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/044_saize/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="サイゼリヤブラックジャック">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="サイゼリヤBJ" data-section="ゲーム" data-url="https://mkt918.github.io/044_saize/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-gray-100" style="background: linear-gradient(135deg, #10b981, #fff, #ef4444)">
                             <svg class="w-6 h-6 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-50 text-red-500">Game</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-50 text-red-500">Game</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-red-600 transition-colors">サイゼリヤBJ</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">サイゼリヤBJ</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">メニューを選んで合計金額を合わせよう。サイゼリヤでブラックジャック。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/045_aichipazuru/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="愛知県パズル">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="愛知県パズル" data-section="ゲーム" data-url="https://mkt918.github.io/045_aichipazuru/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #818cf8, #3b82f6)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A2 2 0 013 15.492V4.508a2 2 0 011.553-1.944L9 1.5m0 18.5l6 3m-6-3V1.5m6 21.5l5.447-2.724A2 2 0 0021 17.508V6.508a2 2 0 00-1.553-1.944L15 1.5m0 21.5V1.5m-6 3l6-3"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Game</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Game</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-indigo-600 transition-colors">愛知県パズル</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">愛知県パズル</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">愛知県の市町村をパズルで覚えよう。Aichi Jigsaw Puzzle。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/animal-shogi-online/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="どうぶつ将棋オンライン">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="どうぶつ将棋オンライン" data-section="ゲーム" data-url="https://mkt918.github.io/animal-shogi-online/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #86efac, #16a34a)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-600">Game</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-600">Game</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-green-600 transition-colors">どうぶつ将棋オンライン</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">どうぶつ将棋オンライン</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">かわいい動物たちで遊ぶオンライン将棋。初心者でも楽しめるシンプルな対戦ゲーム。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/attack25-classroom/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="Attack25 Classroom">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="Attack25 Classroom" data-section="ゲーム" data-url="https://mkt918.github.io/attack25-classroom/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #f87171, #dc2626)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-50 text-red-600">Game</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-50 text-red-600">Game</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-red-600 transition-colors">Attack25 Classroom</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">Attack25 Classroom</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">素早く正解を狙うクイズゲーム。スピードと知識を競い合う教室向け学習ゲーム。</p>
-                </a>
+                </div>
 
             </div>
         </section>
 
         <!-- タイピング -->
-        <section class="mb-7" data-section>
-            <div class="flex items-center gap-2 mb-3">
-                <div class="w-1.5 h-4 rounded-full bg-cyan-400"></div>
-                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">タイピング</h2>
+        <section class="mb-7" data-section="タイピング">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-4 rounded-full bg-cyan-400"></div>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">タイピング</h2>
+                </div>
+                <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="タイピング">表示</button>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="タイピング">
 
-                <a href="https://mkt918.github.io/type06_invader/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="インベーダータイパー">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="インベーダータイパー" data-section="タイピング" data-url="https://mkt918.github.io/type06_invader/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #374151, #16a34a)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v2a1 1 0 01-1 1 1 1 0 00-1 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1 1 1 0 01-1-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-600">Typing</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-600">Typing</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-green-600 transition-colors">インベーダータイパー</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">インベーダータイパー</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">タイピングでインベーダーを撃ち落とせ。正確さとスピードが鍵。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/typing03/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="全商検定タイピング">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="全商検定タイピング" data-section="タイピング" data-url="https://mkt918.github.io/typing03/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #22d3ee, #3b82f6)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-600">Training</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-600">Training</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-cyan-600 transition-colors">全商検定タイピング</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">全商検定タイピング</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">情報処理検定準拠。正確さと速度を追求する練習ツール。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/typing01/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="Sushi Typer">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="Sushi Typer" data-section="タイピング" data-url="https://mkt918.github.io/typing01/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fb923c, #ef4444)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-50 text-orange-500">Typing</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-50 text-orange-500">Typing</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-orange-600 transition-colors">Sushi Typer</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">Sushi Typer</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">寿司生産工場放置ゲーム。タイピングで工場を拡張し世界一へ。</p>
-                </a>
+                </div>
 
             </div>
         </section>
 
         <!-- プログラミング -->
-        <section class="mb-7" data-section>
-            <div class="flex items-center gap-2 mb-3">
-                <div class="w-1.5 h-4 rounded-full bg-violet-400"></div>
-                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">プログラミング</h2>
+        <section class="mb-7" data-section="プログラミング">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-4 rounded-full bg-violet-400"></div>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">プログラミング</h2>
+                </div>
+                <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="プログラミング">表示</button>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="プログラミング">
 
-                <a href="https://mkt918.github.io/pro_04/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="マス目でアルゴリズム">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="マス目でアルゴリズム" data-section="プログラミング" data-url="https://mkt918.github.io/pro_04/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #a78bfa, #7c3aed)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-violet-50 text-violet-500">Visual</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-violet-50 text-violet-500">Visual</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-violet-600 transition-colors">マス目でアルゴリズム</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">マス目でアルゴリズム</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">マス目を使ってアルゴリズムを視覚的に学習。ブロックを並べて実行。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/pro_02/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="Python Turtle Learner">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="Python Turtle Learner" data-section="プログラミング" data-url="https://mkt918.github.io/pro_02/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #34d399, #16a34a)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">Python</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">Python</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-emerald-600 transition-colors">Python Turtle Learner</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">Python Turtle Learner</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">タイピングゼロでPython。ブロックを並べてタートルを動かそう。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/ui-macro-builder/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="UI Macro Builder">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="UI Macro Builder" data-section="プログラミング" data-url="https://mkt918.github.io/ui-macro-builder/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #38bdf8, #0284c7)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-600">VBA</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-600">VBA</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-sky-600 transition-colors">UI Macro Builder</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">UI Macro Builder</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">ブロックを組み立てるだけでExcel VBAが作れる授業用ツール。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/vba-programming-basics/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="VBA Programming Basics">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="VBA Programming Basics" data-section="プログラミング" data-url="https://mkt918.github.io/vba-programming-basics/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #818cf8, #6d28d9)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Tutorial</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Tutorial</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-indigo-600 transition-colors">VBA Programming Basics</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">VBA Programming Basics</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">Excel VBAの基礎から学べる総合チュートリアル。初心者向け体系的教材。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/pro_01/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="アルゴリズム勉強ツール">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="アルゴリズム勉強ツール" data-section="プログラミング" data-url="https://mkt918.github.io/pro_01/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fb7185, #e11d48)">
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0114 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-500">Learning</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-500">Learning</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-rose-600 transition-colors">アルゴリズム勉強ツール</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">アルゴリズム勉強ツール</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">アルゴリズムカードで効率的に学習。視覚的に理解を深める。</p>
-                </a>
+                </div>
 
             </div>
         </section>
 
         <!-- 教育・ツール -->
-        <section class="mb-7" data-section>
-            <div class="flex items-center gap-2 mb-3">
-                <div class="w-1.5 h-4 rounded-full bg-indigo-400"></div>
-                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">教育・ツール</h2>
+        <section class="mb-7" data-section="教育・ツール">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-4 rounded-full bg-indigo-400"></div>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">教育・ツール</h2>
+                </div>
+                <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="教育・ツール">表示</button>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="教育・ツール">
 
-                <a href="jyugyo.html"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="授業WebApp 一覧">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="授業WebApp 一覧" data-section="教育・ツール" data-url="jyugyo.html">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #818cf8, #6366f1)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Education</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Education</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-indigo-600 transition-colors">授業WebApp 一覧</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">授業WebApp 一覧</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">授業名で絞り込んで探せるWebアプリ一覧。全25アプリを収録。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/02_mainportal02/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="学習ポータル">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="学習ポータル" data-section="教育・ツール" data-url="https://mkt918.github.io/02_mainportal02/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #38bdf8, #2563eb)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-600">Portal</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-600">Portal</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-sky-600 transition-colors">学習ポータル</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">学習ポータル</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">授業の復習、時間割、カレンダー、ToDoを一括管理するダッシュボード。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/01_mainportal/index.html#tools-section" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="クラスポータル">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="クラスポータル" data-section="教育・ツール" data-url="https://mkt918.github.io/01_mainportal/index.html#tools-section">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #4ade80, #16a34a)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-600">Portal</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-600">Portal</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-green-600 transition-colors">クラスポータル</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">クラスポータル</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">授業資料、学習ツール、記録をまとめたクラス専用学習支援サイト。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/pro_05_keisan/index.html" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="情報処理計算問題">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="情報処理計算問題" data-section="教育・ツール" data-url="https://mkt918.github.io/pro_05_keisan/index.html">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #818cf8, #1d4ed8)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Learning</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Learning</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-indigo-600 transition-colors">情報処理計算問題</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">情報処理計算問題</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">基数変換や通信速度など、情報処理の計算を体系的に学ぶ。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/quizmillion/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="情報処理ミリオネア">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="情報処理ミリオネア" data-section="教育・ツール" data-url="https://mkt918.github.io/quizmillion/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fbbf24, #d97706)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Quiz</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Quiz</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-amber-600 transition-colors">情報処理ミリオネア</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">情報処理ミリオネア</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">4択クイズで100万ドルを目指せ。オーディエンス機能付きクイズ。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/051_crossword/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="クロスワードビルダー">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="クロスワードビルダー" data-section="教育・ツール" data-url="https://mkt918.github.io/051_crossword/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fcd34d, #f59e0b)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Tool</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Tool</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-amber-600 transition-colors">クロスワードビルダー</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">クロスワードビルダー</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">自分だけのクロスワードパズルを作成・プレイできるビルダーツール。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/03_goodnote/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="GoodNote Web">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="GoodNote Web" data-section="教育・ツール" data-url="https://mkt918.github.io/03_goodnote/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #f87171, #f97316)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-500">Tool</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-500">Tool</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-rose-600 transition-colors">GoodNote Web</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">GoodNote Web</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">PDFアップロード・白紙ノート作成ができるWeb版ノートアプリ。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/061_nyujouQR/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="入場受付システム">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="入場受付システム" data-section="教育・ツール" data-url="https://mkt918.github.io/061_nyujouQR/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #34d399, #0d9488)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">System</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">System</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-emerald-600 transition-colors">入場受付システム</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">入場受付システム</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">QRコードを活用したスマートな入場受付管理システム。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/stock_01/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="株式投資学習ツール">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="株式投資学習ツール" data-section="教育・ツール" data-url="https://mkt918.github.io/stock_01/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #22d3ee, #2563eb)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-600">Finance</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-600">Finance</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-cyan-600 transition-colors">株式投資学習ツール</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">株式投資学習ツール</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">中高生向け金融リテラシー。株式投資をダッシュボードで体験。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/timetable-kun-v1/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="時間割くん">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="時間割くん" data-section="教育・ツール" data-url="https://mkt918.github.io/timetable-kun-v1/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #60a5fa, #3b82f6)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-500">Education</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-500">Education</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-blue-600 transition-colors">時間割くん</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">時間割くん</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">教員・クラス時間割リンクシステム。授業・会議を一元管理。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/059_recipe/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="RecipeHub">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="RecipeHub" data-section="教育・ツール" data-url="https://mkt918.github.io/059_recipe/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fb923c, #d97706)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 7 9a11.002 11.002 0 00-1-5c3 0 5 3 5 3s1-2 1-2a11.003 11.003 0 001 5s-1-2-1-2a8 8 0 017 7z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-50 text-orange-500">Food</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-50 text-orange-500">Food</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-orange-600 transition-colors">RecipeHub</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">RecipeHub</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">種別や主な食材から探せるプレミアムなレシピサイト。</p>
-                </a>
+                </div>
 
-                <a href="https://mkt918.github.io/r80-case-method-kenkyu/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="R80ケースメソッド研究">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="R80ケースメソッド研究" data-section="教育・ツール" data-url="https://mkt918.github.io/r80-case-method-kenkyu/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fbbf24, #d97706)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Research</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Research</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-amber-600 transition-colors">R80ケースメソッド研究</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">R80ケースメソッド研究</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">事例研究（ケースメソッド）をR80学習法で実践。実践的な思考スキルを養成。</p>
-                </a>
+                </div>
 
             </div>
         </section>
 
         <!-- 商業・金融 -->
-        <section class="mb-7" data-section>
-            <div class="flex items-center gap-2 mb-3">
-                <div class="w-1.5 h-4 rounded-full bg-emerald-400"></div>
-                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">商業・金融</h2>
+        <section class="mb-7" data-section="商業・金融">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-4 rounded-full bg-emerald-400"></div>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest">商業・金融</h2>
+                </div>
+                <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="商業・金融">表示</button>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="商業・金融">
 
-                <a href="https://edinet-monitor.vercel.app/" target="_blank" rel="noopener noreferrer"
-                    class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="EDINET Monitor">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="EDINET Monitor" data-section="商業・金融" data-url="https://edinet-monitor.vercel.app/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #34d399, #0d9488)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">Finance</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">Finance</span>
+                            <div class="card-menu flex gap-1">
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-emerald-600 transition-colors">EDINET Monitor</h3>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">EDINET Monitor</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">大量保有報告書モニタリング。企業の株主構成変化をリアルタイム追跡。</p>
-                </a>
+                </div>
 
             </div>
         </section>
@@ -518,7 +750,7 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-100 px-6 py-2 shrink-0 flex justify-between items-center text-xs text-slate-400">
         <div class="flex gap-5">
-            <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>31 Apps</span>
+            <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span><span id="footerCount">31</span> Apps</span>
             <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>Free 100%</span>
             <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>24/7 Uptime</span>
         </div>
@@ -526,20 +758,97 @@
     </footer>
 
     <script>
-        const input = document.getElementById('searchInput');
+        // ドラッグ&ドロップ機能
+        let draggedCard = null;
+
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.addEventListener('dragstart', (e) => {
+                draggedCard = card;
+                card.classList.add('dragging');
+            });
+
+            card.addEventListener('dragend', (e) => {
+                card.classList.remove('dragging');
+                document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+            });
+
+            card.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                if (draggedCard && draggedCard !== card) {
+                    card.classList.add('drag-over');
+                }
+            });
+
+            card.addEventListener('dragleave', () => {
+                card.classList.remove('drag-over');
+            });
+
+            card.addEventListener('drop', (e) => {
+                e.preventDefault();
+                card.classList.remove('drag-over');
+                if (draggedCard && draggedCard !== card && draggedCard.dataset.section === card.dataset.section) {
+                    card.parentNode.insertBefore(draggedCard, card);
+                    saveLayout();
+                }
+            });
+        });
+
+        // ピン機能
+        document.querySelectorAll('.pin-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const card = btn.closest('.card-hover');
+                const section = card.dataset.section;
+                const favSection = document.getElementById('favoriteSection');
+                const favContainer = favSection.querySelector('[data-cards="favorites"]');
+
+                if (card.dataset.section === 'favorites') {
+                    // ピンを外す
+                    const origSection = card.dataset.originalSection;
+                    card.dataset.section = origSection;
+                    document.querySelector(`[data-cards="${origSection}"]`).appendChild(card);
+                    btn.classList.remove('text-amber-500');
+                } else {
+                    // ピンを立てる
+                    card.dataset.originalSection = section;
+                    card.dataset.section = 'favorites';
+                    favContainer.appendChild(card);
+                    btn.classList.add('text-amber-500');
+                    favSection.classList.remove('hidden');
+                }
+                saveLayout();
+                updateCardMenus();
+            });
+        });
+
+        // グループの表示/非表示切り替え
+        document.querySelectorAll('.group-toggle').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = btn.dataset.toggle;
+                const container = document.querySelector(`[data-cards="${section}"]`);
+                const isHidden = container.style.display === 'none';
+                container.style.display = isHidden ? '' : 'none';
+                btn.textContent = isHidden ? '表示' : '非表示';
+                saveLayout();
+            });
+        });
+
+        // 検索機能
+        const searchInput = document.getElementById('searchInput');
         const noResults = document.getElementById('noResults');
         const searchQuery = document.getElementById('searchQuery');
-        const sections = document.querySelectorAll('[data-section]');
 
-        input.addEventListener('input', () => {
-            const q = input.value.trim().toLowerCase();
+        searchInput.addEventListener('input', () => {
+            const q = searchInput.value.trim().toLowerCase();
+            const sections = document.querySelectorAll('[data-section]');
             let total = 0;
 
             sections.forEach(section => {
                 const cards = section.querySelectorAll('[data-name]');
                 let visible = 0;
                 cards.forEach(card => {
-                    const name = card.getAttribute('data-name').toLowerCase();
+                    const name = card.dataset.name.toLowerCase();
                     const desc = card.querySelector('p')?.textContent.toLowerCase() || '';
                     const match = !q || name.includes(q) || desc.includes(q);
                     card.style.display = match ? '' : 'none';
@@ -550,8 +859,64 @@
             });
 
             noResults.classList.toggle('hidden', total > 0 || !q);
-            searchQuery.textContent = input.value.trim();
+            searchQuery.textContent = searchInput.value.trim();
         });
+
+        // 編集モード
+        const editBtn = document.getElementById('editBtn');
+        let isEditMode = false;
+
+        editBtn.addEventListener('click', () => {
+            isEditMode = !isEditMode;
+            document.querySelectorAll('[draggable]').forEach(el => {
+                el.draggable = isEditMode;
+                el.style.cursor = isEditMode ? 'grab' : 'default';
+            });
+            editBtn.classList.toggle('bg-indigo-50', isEditMode);
+            editBtn.classList.toggle('text-indigo-600', isEditMode);
+        });
+
+        // localStorageに保存
+        function saveLayout() {
+            const layout = {};
+            document.querySelectorAll('[data-cards]').forEach(container => {
+                const section = container.dataset.cards;
+                layout[section] = Array.from(container.querySelectorAll('[data-name]')).map(card => card.dataset.name);
+            });
+            localStorage.setItem('appLayout', JSON.stringify(layout));
+        }
+
+        // localStorageから復元
+        function loadLayout() {
+            const layout = JSON.parse(localStorage.getItem('appLayout')) || {};
+            Object.entries(layout).forEach(([section, names]) => {
+                const container = document.querySelector(`[data-cards="${section}"]`);
+                if (!container) return;
+
+                const cards = names.map(name => {
+                    return Array.from(document.querySelectorAll(`[data-name="${name}"]`)).find(c => c.dataset.section === section);
+                }).filter(Boolean);
+
+                cards.forEach(card => container.appendChild(card));
+            });
+        }
+
+        function updateCardMenus() {
+            document.querySelectorAll('.pin-btn').forEach(btn => {
+                const card = btn.closest('.card-hover');
+                if (card.dataset.section === 'favorites') {
+                    btn.classList.add('text-amber-500');
+                } else {
+                    btn.classList.remove('text-amber-500');
+                }
+            });
+        }
+
+        // 初期化
+        loadLayout();
+        updateCardMenus();
+        document.getElementById('appCount').textContent = document.querySelectorAll('[data-name]').length;
+        document.getElementById('footerCount').textContent = document.querySelectorAll('[data-name]').length;
     </script>
 
 </body>
