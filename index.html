@@ -17,9 +17,7 @@
             transform: translateY(-3px);
             box-shadow: 0 12px 32px -8px rgba(0,0,0,0.12), 0 4px 12px -4px rgba(0,0,0,0.06);
         }
-        .card-hover.dragging {
-            opacity: 0.5;
-        }
+        .card-hover.dragging { opacity: 0.5; }
         .card-hover.drag-over {
             transform: scale(0.98);
             border-color: #6366f1 !important;
@@ -32,8 +30,9 @@
         .card-menu { display: none; }
         .card-hover:hover .card-menu { display: flex; }
         .group-toggle { cursor: pointer; }
-        .section-title { cursor: pointer; }
-        .section-title:hover { opacity: 0.7; }
+        .section-title { cursor: default; }
+        .section-title.editable { cursor: pointer; }
+        .section-title.editable:hover { opacity: 0.7; }
         .section-title-input { font-size: inherit; }
     </style>
 </head>
@@ -78,6 +77,10 @@
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     グループ
                 </button>
+                <button id="resetBtn" class="flex items-center gap-1.5 px-3 py-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all text-sm font-medium border border-transparent hover:border-red-200 hidden" title="設定をリセット">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    リセット
+                </button>
                 <a href="https://github.com/mkt918" target="_blank" rel="noopener noreferrer"
                     class="shrink-0 flex items-center gap-1.5 px-3 py-2 text-slate-500 hover:text-slate-800 hover:bg-gray-50 rounded-lg transition-all text-sm font-medium border border-transparent hover:border-gray-200">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -94,45 +97,41 @@
         <div class="max-w-7xl mx-auto px-6 py-5" id="allSections">
 
         <!-- Favorites (pinned) -->
-        <section id="favoriteSection" class="mb-7 hidden" data-section="favorites" data-label="お気に入り">
+        <section id="favoriteSection" class="mb-7 hidden" data-section="favorites" data-builtin="true">
             <div class="flex items-center justify-between mb-3">
                 <div class="flex items-center gap-2">
                     <span class="text-amber-400 text-base">★</span>
                     <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest section-title">お気に入り</h2>
                 </div>
-                <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="favorites">表示</button>
+                <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="favorites">非表示</button>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="favorites"></div>
         </section>
 
         <!-- よく使う -->
-        <section class="mb-7" data-section="よく使う" data-label="よく使う">
+        <section class="mb-7" data-section="よく使う" data-builtin="true">
             <div class="flex items-center justify-between mb-3">
                 <div class="flex items-center gap-2">
                     <span class="text-amber-400 text-base">★</span>
-                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest section-title cursor-pointer">よく使う</h2>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest section-title">よく使う</h2>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle edit-only hidden" data-toggle="よく使う" title="削除">✕</button>
-                    <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="よく使う">表示</button>
+                    <button class="text-xs text-slate-400 hover:text-red-500 group-delete edit-only hidden" data-section="よく使う" title="グループ削除">削除</button>
+                    <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="よく使う">非表示</button>
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="よく使う">
 
-                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="教員業務支援アプリ" data-section="よく使う" data-url="https://mkt918.github.io/Teacher/#dashboard">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="教員業務支援アプリ" data-section="よく使う" data-url="https://mkt918.github.io/Teacher/#dashboard">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #a78bfa, #6366f1)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-50 text-purple-500">Education</span>
-                            <div class="card-menu flex gap-1">
-                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0C3.423 6.031 7.362 9 12 9c4.638 0 8.577-2.969 9.646-4.354a.5.5 0 0 1 .708.708C20.577 7.969 16.638 11 12 11c-4.638 0-8.577-3.031-9.646-4.354a.5.5 0 0 1 0-.708zM1.646 19.354a.5.5 0 0 0 .708 0C3.423 17.969 7.362 15 12 15c4.638 0 8.577 2.969 9.646 4.354a.5.5 0 0 0 .708-.708C20.577 16.031 16.638 13 12 13c-4.638 0-8.577 3.031-9.646 4.354a.5.5 0 0 0 0 .708z" clip-rule="evenodd"/></svg>
-                                </button>
-                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
-                                </button>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
                             </div>
                         </div>
                     </div>
@@ -140,20 +139,16 @@
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">担任業務効率化。席替え、グループ分け、出欠管理などをサポート。</p>
                 </div>
 
-                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="Manual Hub" data-section="よく使う" data-url="https://mkt918.github.io/04_manual/#list">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="Manual Hub" data-section="よく使う" data-url="https://mkt918.github.io/04_manual/#list">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #60a5fa, #3b82f6)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-500">Document</span>
-                            <div class="card-menu flex gap-1">
-                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0C3.423 6.031 7.362 9 12 9c4.638 0 8.577-2.969 9.646-4.354a.5.5 0 0 1 .708.708C20.577 7.969 16.638 11 12 11c-4.638 0-8.577-3.031-9.646-4.354a.5.5 0 0 1 0-.708zM1.646 19.354a.5.5 0 0 0 .708 0C3.423 17.969 7.362 15 12 15c4.638 0 8.577 2.969 9.646 4.354a.5.5 0 0 0 .708-.708C20.577 16.031 16.638 13 12 13c-4.638 0-8.577 3.031-9.646 4.354a.5.5 0 0 0 0 .708z" clip-rule="evenodd"/></svg>
-                                </button>
-                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
-                                </button>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
                             </div>
                         </div>
                     </div>
@@ -161,20 +156,16 @@
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">ICT活用や業務効率化に役立つプレミアムマニュアルのアーカイブ。</p>
                 </div>
 
-                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="プログラミング学習ポータル" data-section="よく使う" data-url="https://mkt918.github.io/kaken01_system/">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="プログラミング学習ポータル" data-section="よく使う" data-url="https://mkt918.github.io/kaken01_system/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #c084fc, #a855f7)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-violet-50 text-violet-500">Programming</span>
-                            <div class="card-menu flex gap-1">
-                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0C3.423 6.031 7.362 9 12 9c4.638 0 8.577-2.969 9.646-4.354a.5.5 0 0 1 .708.708C20.577 7.969 16.638 11 12 11c-4.638 0-8.577-3.031-9.646-4.354a.5.5 0 0 1 0-.708zM1.646 19.354a.5.5 0 0 0 .708 0C3.423 17.969 7.362 15 12 15c4.638 0 8.577 2.969 9.646 4.354a.5.5 0 0 0 .708-.708C20.577 16.031 16.638 13 12 13c-4.638 0-8.577 3.031-9.646 4.354a.5.5 0 0 0 0 .708z" clip-rule="evenodd"/></svg>
-                                </button>
-                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
-                                </button>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
                             </div>
                         </div>
                     </div>
@@ -186,33 +177,29 @@
         </section>
 
         <!-- ゲーム -->
-        <section class="mb-7" data-section="ゲーム" data-label="ゲーム">
+        <section class="mb-7" data-section="ゲーム" data-builtin="true">
             <div class="flex items-center justify-between mb-3">
                 <div class="flex items-center gap-2">
                     <div class="w-1.5 h-4 rounded-full bg-amber-400"></div>
-                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest section-title cursor-pointer">ゲーム</h2>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest section-title">ゲーム</h2>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle edit-only hidden" data-toggle="ゲーム" title="削除">✕</button>
-                    <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="ゲーム">表示</button>
+                    <button class="text-xs text-slate-400 hover:text-red-500 group-delete edit-only hidden" data-section="ゲーム" title="グループ削除">削除</button>
+                    <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="ゲーム">非表示</button>
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="ゲーム">
 
-                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="職位並び替えクイズ" data-section="ゲーム" data-url="https://mkt918.github.io/01bikomi_shokui/">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="職位並び替えクイズ" data-section="ゲーム" data-url="https://mkt918.github.io/01bikomi_shokui/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fbbf24, #f59e0b)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Game</span>
-                            <div class="card-menu flex gap-1">
-                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0C3.423 6.031 7.362 9 12 9c4.638 0 8.577-2.969 9.646-4.354a.5.5 0 0 1 .708.708C20.577 7.969 16.638 11 12 11c-4.638 0-8.577-3.031-9.646-4.354a.5.5 0 0 1 0-.708zM1.646 19.354a.5.5 0 0 0 .708 0C3.423 17.969 7.362 15 12 15c4.638 0 8.577 2.969 9.646 4.354a.5.5 0 0 0 .708-.708C20.577 16.031 16.638 13 12 13c-4.638 0-8.577 3.031-9.646 4.354a.5.5 0 0 0 0 .708z" clip-rule="evenodd"/></svg>
-                                </button>
-                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
-                                </button>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
                             </div>
                         </div>
                     </div>
@@ -220,20 +207,16 @@
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">職位の順序を正しく並び替えて昇格を目指せ。ルーレットで知識を試す。</p>
                 </div>
 
-                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="シティチェイス" data-section="ゲーム" data-url="https://mkt918.github.io/050_citychase/">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="シティチェイス" data-section="ゲーム" data-url="https://mkt918.github.io/050_citychase/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #475569, #1e3a5f)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">Game</span>
-                            <div class="card-menu flex gap-1">
-                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0C3.423 6.031 7.362 9 12 9c4.638 0 8.577-2.969 9.646-4.354a.5.5 0 0 1 .708.708C20.577 7.969 16.638 11 12 11c-4.638 0-8.577-3.031-9.646-4.354a.5.5 0 0 1 0-.708zM1.646 19.354a.5.5 0 0 0 .708 0C3.423 17.969 7.362 15 12 15c4.638 0 8.577 2.969 9.646 4.354a.5.5 0 0 0 .708-.708C20.577 16.031 16.638 13 12 13c-4.638 0-8.577 3.031-9.646 4.354a.5.5 0 0 0 0 .708z" clip-rule="evenodd"/></svg>
-                                </button>
-                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
-                                </button>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
                             </div>
                         </div>
                     </div>
@@ -241,20 +224,16 @@
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">警察vs犯人の頭脳戦ボードゲーム。ヘリコプターとパトカーで追い詰めろ。</p>
                 </div>
 
-                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="キリンメーター" data-section="ゲーム" data-url="https://mkt918.github.io/046_kirin2/">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="キリンメーター" data-section="ゲーム" data-url="https://mkt918.github.io/046_kirin2/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fb923c, #f97316)">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-50 text-orange-500">Game</span>
-                            <div class="card-menu flex gap-1">
-                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0C3.423 6.031 7.362 9 12 9c4.638 0 8.577-2.969 9.646-4.354a.5.5 0 0 1 .708.708C20.577 7.969 16.638 11 12 11c-4.638 0-8.577-3.031-9.646-4.354a.5.5 0 0 1 0-.708zM1.646 19.354a.5.5 0 0 0 .708 0C3.423 17.969 7.362 15 12 15c4.638 0 8.577 2.969 9.646 4.354a.5.5 0 0 0 .708-.708C20.577 16.031 16.638 13 12 13c-4.638 0-8.577 3.031-9.646 4.354a.5.5 0 0 0 0 .708z" clip-rule="evenodd"/></svg>
-                                </button>
-                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
-                                </button>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
                             </div>
                         </div>
                     </div>
@@ -262,25 +241,497 @@
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">事象の「大きさ」を比較し、最大・最小を当てる直感センスゲーム。</p>
                 </div>
 
-                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" draggable="true" data-name="サイゼリヤBJ" data-section="ゲーム" data-url="https://mkt918.github.io/044_saize/">
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="サイゼリヤBJ" data-section="ゲーム" data-url="https://mkt918.github.io/044_saize/">
                     <div class="flex items-start justify-between mb-3">
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-gray-100" style="background: linear-gradient(135deg, #10b981, #fff, #ef4444)">
                             <svg class="w-6 h-6 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-50 text-red-500">Game</span>
-                            <div class="card-menu flex gap-1">
-                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0C3.423 6.031 7.362 9 12 9c4.638 0 8.577-2.969 9.646-4.354a.5.5 0 0 1 .708.708C20.577 7.969 16.638 11 12 11c-4.638 0-8.577-3.031-9.646-4.354a.5.5 0 0 1 0-.708zM1.646 19.354a.5.5 0 0 0 .708 0C3.423 17.969 7.362 15 12 15c4.638 0 8.577 2.969 9.646 4.354a.5.5 0 0 0 .708-.708C20.577 16.031 16.638 13 12 13c-4.638 0-8.577 3.031-9.646 4.354a.5.5 0 0 0 0 .708z" clip-rule="evenodd"/></svg>
-                                </button>
-                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 5.757L19.414 7.514m-8.485 8.485l8.485-8.485M9.172 9.172L7.414 7.414m8.485 8.485l-8.485-8.485m0 0l-2.121 2.121m2.121-2.121l2.121 2.121M5.586 5.586L3.828 3.828"/></svg>
-                                </button>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
                             </div>
                         </div>
                     </div>
                     <h3 class="font-semibold text-slate-800 text-sm mb-1">サイゼリヤBJ</h3>
                     <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">メニューを選んで合計金額を合わせよう。サイゼリヤでブラックジャック。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="愛知県パズル" data-section="ゲーム" data-url="https://mkt918.github.io/045_aichipazuru/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #818cf8, #3b82f6)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A2 2 0 013 15.492V4.508a2 2 0 011.553-1.944L9 1.5m0 18.5l6 3m-6-3V1.5m6 21.5l5.447-2.724A2 2 0 0021 17.508V6.508a2 2 0 00-1.553-1.944L15 1.5m0 21.5V1.5m-6 3l6-3"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Game</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">愛知県パズル</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">愛知県の市町村をパズルで覚えよう。Aichi Jigsaw Puzzle。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="どうぶつ将棋オンライン" data-section="ゲーム" data-url="https://mkt918.github.io/animal-shogi-online/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #86efac, #16a34a)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-600">Game</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">どうぶつ将棋オンライン</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">かわいい動物たちで遊ぶオンライン将棋。初心者でも楽しめるシンプルな対戦ゲーム。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="Attack25 Classroom" data-section="ゲーム" data-url="https://mkt918.github.io/attack25-classroom/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #f87171, #dc2626)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-50 text-red-600">Game</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">Attack25 Classroom</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">素早く正解を狙うクイズゲーム。スピードと知識を競い合う教室向け学習ゲーム。</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- タイピング -->
+        <section class="mb-7" data-section="タイピング" data-builtin="true">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-4 rounded-full bg-cyan-400"></div>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest section-title">タイピング</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="text-xs text-slate-400 hover:text-red-500 group-delete edit-only hidden" data-section="タイピング" title="グループ削除">削除</button>
+                    <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="タイピング">非表示</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="タイピング">
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="インベーダータイパー" data-section="タイピング" data-url="https://mkt918.github.io/type06_invader/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #374151, #16a34a)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v2a1 1 0 01-1 1 1 1 0 00-1 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1 1 1 0 01-1-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-600">Typing</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">インベーダータイパー</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">タイピングでインベーダーを撃ち落とせ。正確さとスピードが鍵。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="全商検定タイピング" data-section="タイピング" data-url="https://mkt918.github.io/typing03/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #22d3ee, #3b82f6)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-600">Training</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">全商検定タイピング</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">情報処理検定準拠。正確さと速度を追求する練習ツール。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="Sushi Typer" data-section="タイピング" data-url="https://mkt918.github.io/typing01/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fb923c, #ef4444)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-50 text-orange-500">Typing</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">Sushi Typer</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">寿司生産工場放置ゲーム。タイピングで工場を拡張し世界一へ。</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- プログラミング -->
+        <section class="mb-7" data-section="プログラミング" data-builtin="true">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-4 rounded-full bg-violet-400"></div>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest section-title">プログラミング</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="text-xs text-slate-400 hover:text-red-500 group-delete edit-only hidden" data-section="プログラミング" title="グループ削除">削除</button>
+                    <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="プログラミング">非表示</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="プログラミング">
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="マス目でアルゴリズム" data-section="プログラミング" data-url="https://mkt918.github.io/pro_04/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #a78bfa, #7c3aed)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-violet-50 text-violet-500">Visual</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">マス目でアルゴリズム</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">マス目を使ってアルゴリズムを視覚的に学習。ブロックを並べて実行。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="Python Turtle Learner" data-section="プログラミング" data-url="https://mkt918.github.io/pro_02/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #34d399, #16a34a)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">Python</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">Python Turtle Learner</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">タイピングゼロでPython。ブロックを並べてタートルを動かそう。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="UI Macro Builder" data-section="プログラミング" data-url="https://mkt918.github.io/ui-macro-builder/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #38bdf8, #0284c7)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-600">VBA</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">UI Macro Builder</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">ブロックを組み立てるだけでExcel VBAが作れる授業用ツール。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="VBA Programming Basics" data-section="プログラミング" data-url="https://mkt918.github.io/vba-programming-basics/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #818cf8, #6d28d9)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Tutorial</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">VBA Programming Basics</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">Excel VBAの基礎から学べる総合チュートリアル。初心者向け体系的教材。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="アルゴリズム勉強ツール" data-section="プログラミング" data-url="https://mkt918.github.io/pro_01/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fb7185, #e11d48)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-500">Learning</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">アルゴリズム勉強ツール</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">アルゴリズムカードで効率的に学習。視覚的に理解を深める。</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 教育・ツール -->
+        <section class="mb-7" data-section="教育・ツール" data-builtin="true">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-4 rounded-full bg-indigo-400"></div>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest section-title">教育・ツール</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="text-xs text-slate-400 hover:text-red-500 group-delete edit-only hidden" data-section="教育・ツール" title="グループ削除">削除</button>
+                    <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="教育・ツール">非表示</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="教育・ツール">
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="授業WebApp 一覧" data-section="教育・ツール" data-url="jyugyo.html">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #818cf8, #6366f1)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Education</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">授業WebApp 一覧</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">授業名で絞り込んで探せるWebアプリ一覧。全25アプリを収録。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="学習ポータル" data-section="教育・ツール" data-url="https://mkt918.github.io/02_mainportal02/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #38bdf8, #2563eb)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-600">Portal</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">学習ポータル</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">授業の復習、時間割、カレンダー、ToDoを一括管理するダッシュボード。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="クラスポータル" data-section="教育・ツール" data-url="https://mkt918.github.io/01_mainportal/index.html#tools-section">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #4ade80, #16a34a)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-600">Portal</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">クラスポータル</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">授業資料、学習ツール、記録をまとめたクラス専用学習支援サイト。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="情報処理計算問題" data-section="教育・ツール" data-url="https://mkt918.github.io/pro_05_keisan/index.html">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #818cf8, #1d4ed8)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500">Learning</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">情報処理計算問題</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">基数変換や通信速度など、情報処理の計算を体系的に学ぶ。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="情報処理ミリオネア" data-section="教育・ツール" data-url="https://mkt918.github.io/quizmillion/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fbbf24, #d97706)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Quiz</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">情報処理ミリオネア</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">4択クイズで100万ドルを目指せ。オーディエンス機能付きクイズ。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="クロスワードビルダー" data-section="教育・ツール" data-url="https://mkt918.github.io/051_crossword/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fcd34d, #f59e0b)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Tool</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">クロスワードビルダー</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">自分だけのクロスワードパズルを作成・プレイできるビルダーツール。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="GoodNote Web" data-section="教育・ツール" data-url="https://mkt918.github.io/03_goodnote/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #f87171, #f97316)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-500">Tool</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">GoodNote Web</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">PDFアップロード・白紙ノート作成ができるWeb版ノートアプリ。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="入場受付システム" data-section="教育・ツール" data-url="https://mkt918.github.io/061_nyujouQR/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #34d399, #0d9488)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">System</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">入場受付システム</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">QRコードを活用したスマートな入場受付管理システム。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="株式投資学習ツール" data-section="教育・ツール" data-url="https://mkt918.github.io/stock_01/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #22d3ee, #2563eb)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-600">Finance</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">株式投資学習ツール</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">中高生向け金融リテラシー。株式投資をダッシュボードで体験。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="時間割くん" data-section="教育・ツール" data-url="https://mkt918.github.io/timetable-kun-v1/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #60a5fa, #3b82f6)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-500">Education</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">時間割くん</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">教員・クラス時間割リンクシステム。授業・会議を一元管理。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="RecipeHub" data-section="教育・ツール" data-url="https://mkt918.github.io/059_recipe/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fb923c, #d97706)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 7 9a11.002 11.002 0 00-1-5c3 0 5 3 5 3s1-2 1-2a11.003 11.003 0 001 5s-1-2-1-2a8 8 0 017 7z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-50 text-orange-500">Food</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">RecipeHub</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">種別や主な食材から探せるプレミアムなレシピサイト。</p>
+                </div>
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="R80ケースメソッド研究" data-section="教育・ツール" data-url="https://mkt918.github.io/r80-case-method-kenkyu/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #fbbf24, #d97706)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Research</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">R80ケースメソッド研究</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">事例研究（ケースメソッド）をR80学習法で実践。実践的な思考スキルを養成。</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 商業・金融 -->
+        <section class="mb-7" data-section="商業・金融" data-builtin="true">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-4 rounded-full bg-emerald-400"></div>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest section-title">商業・金融</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="text-xs text-slate-400 hover:text-red-500 group-delete edit-only hidden" data-section="商業・金融" title="グループ削除">削除</button>
+                    <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="商業・金融">非表示</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="商業・金融">
+
+                <div class="card-hover group bg-white rounded-2xl p-4 border border-gray-100 flex flex-col h-full" data-name="EDINET Monitor" data-section="商業・金融" data-url="https://edinet-monitor.vercel.app/">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #34d399, #0d9488)">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">Finance</span>
+                            <div class="card-menu gap-1">
+                                <button class="visibility-btn text-slate-400 hover:text-slate-600 transition" title="表示/非表示"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                                <button class="pin-btn text-slate-400 hover:text-amber-500 transition" title="ピン"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1">EDINET Monitor</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed flex-1 line-clamp-2">大量保有報告書モニタリング。企業の株主構成変化をリアルタイム追跡。</p>
                 </div>
 
             </div>
@@ -306,58 +757,54 @@
     </footer>
 
     <script>
-        // ストレージキー
-        const STORAGE_KEY = 'appPortalConfig';
-
-        // 設定を読み込む
-        function loadConfig() {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-                layout: {},
-                hiddenApps: new Set(),
-                sectionNames: {},
-                visibleSections: {},
-                hiddenSections: new Set()
-            };
-        }
-
-        // 設定を保存
-        function saveConfig(config) {
-            const toSave = {
-                ...config,
-                hiddenApps: Array.from(config.hiddenApps),
-                hiddenSections: Array.from(config.hiddenSections)
-            };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
-        }
-
-        let config = loadConfig();
-        config.hiddenApps = new Set(config.hiddenApps || []);
-        config.hiddenSections = new Set(config.hiddenSections || []);
-
-        // ドラッグ&ドロップ
+        const STORAGE_KEY = 'appPortalConfigV2';
+        let isEditMode = false;
         let draggedCard = null;
         let isDragging = false;
 
-        document.querySelectorAll('.card-hover').forEach(card => {
-            card.addEventListener('dragstart', (e) => {
+        function loadConfig() {
+            const raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            return {
+                layout: raw.layout || {},
+                hiddenApps: new Set(raw.hiddenApps || []),
+                hiddenSections: new Set(raw.hiddenSections || []),
+                deletedSections: new Set(raw.deletedSections || []),
+                sectionNames: raw.sectionNames || {},
+                customSections: raw.customSections || [],
+                pins: raw.pins || {}
+            };
+        }
+
+        function saveConfig() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                layout: config.layout,
+                hiddenApps: Array.from(config.hiddenApps),
+                hiddenSections: Array.from(config.hiddenSections),
+                deletedSections: Array.from(config.deletedSections),
+                sectionNames: config.sectionNames,
+                customSections: config.customSections,
+                pins: config.pins
+            }));
+        }
+
+        let config = loadConfig();
+
+        function initCardEvents(card) {
+            card.addEventListener('dragstart', () => {
                 isDragging = true;
                 draggedCard = card;
                 card.classList.add('dragging');
             });
-
             card.addEventListener('dragend', () => {
                 isDragging = false;
                 card.classList.remove('dragging');
                 document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
             });
-
             card.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 if (draggedCard && draggedCard !== card) card.classList.add('drag-over');
             });
-
             card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
-
             card.addEventListener('drop', (e) => {
                 e.preventDefault();
                 card.classList.remove('drag-over');
@@ -366,298 +813,285 @@
                     saveLayout();
                 }
             });
-
-            // クリックでリンク遷移（編集モードでないかつドラッグ中でない時）
             card.addEventListener('click', (e) => {
                 if (!isEditMode && !isDragging && !e.target.closest('button')) {
                     const url = card.dataset.url;
                     if (url) window.location.href = url;
                 }
             });
-        });
 
-        // 表示/非表示機能
-        document.querySelectorAll('.visibility-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const card = btn.closest('.card-hover');
-                const appName = card.dataset.name;
-
-                if (config.hiddenApps.has(appName)) {
-                    config.hiddenApps.delete(appName);
-                    card.classList.remove('hidden-card');
-                    btn.classList.remove('text-red-500');
-                } else {
-                    config.hiddenApps.add(appName);
+            const visBtn = card.querySelector('.visibility-btn');
+            if (visBtn) {
+                visBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const appName = card.dataset.name;
+                    if (config.hiddenApps.has(appName)) {
+                        config.hiddenApps.delete(appName);
+                        card.classList.remove('hidden-card');
+                        visBtn.classList.remove('text-red-500');
+                    } else {
+                        config.hiddenApps.add(appName);
+                        card.classList.add('hidden-card');
+                        visBtn.classList.add('text-red-500');
+                    }
+                    saveConfig();
+                });
+                if (config.hiddenApps.has(card.dataset.name)) {
                     card.classList.add('hidden-card');
-                    btn.classList.add('text-red-500');
+                    visBtn.classList.add('text-red-500');
                 }
-                saveConfig(config);
-            });
-
-            // 初期状態を設定
-            const card = btn.closest('.card-hover');
-            if (config.hiddenApps.has(card.dataset.name)) {
-                card.classList.add('hidden-card');
-                btn.classList.add('text-red-500');
             }
-        });
 
-        // ピン機能
-        document.querySelectorAll('.pin-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const card = btn.closest('.card-hover');
-                const section = card.dataset.section;
-                const favSection = document.getElementById('favoriteSection');
-                const favContainer = favSection.querySelector('[data-cards="favorites"]');
+            const pinBtn = card.querySelector('.pin-btn');
+            if (pinBtn) {
+                pinBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const favSection = document.getElementById('favoriteSection');
+                    const favContainer = favSection.querySelector('[data-cards="favorites"]');
 
-                if (card.dataset.section === 'favorites') {
-                    const origSection = card.dataset.originalSection;
-                    card.dataset.section = origSection;
-                    document.querySelector(`[data-cards="${origSection}"]`).appendChild(card);
-                    btn.classList.remove('text-amber-500');
-                } else {
-                    card.dataset.originalSection = section;
-                    card.dataset.section = 'favorites';
-                    favContainer.appendChild(card);
-                    btn.classList.add('text-amber-500');
-                    favSection.classList.remove('hidden');
-                }
-                saveLayout();
-                updateCardMenus();
-            });
-        });
+                    if (card.dataset.section === 'favorites') {
+                        const origSection = card.dataset.originalSection;
+                        card.dataset.section = origSection;
+                        const target = document.querySelector(`[data-cards="${origSection}"]`);
+                        if (target) target.appendChild(card);
+                        pinBtn.classList.remove('text-amber-500');
+                        delete config.pins[card.dataset.name];
+                    } else {
+                        card.dataset.originalSection = card.dataset.section;
+                        card.dataset.section = 'favorites';
+                        favContainer.appendChild(card);
+                        pinBtn.classList.add('text-amber-500');
+                        favSection.classList.remove('hidden');
+                        config.pins[card.dataset.name] = card.dataset.originalSection;
+                    }
+                    saveConfig();
+                });
+            }
+        }
 
-        // グループの表示/非表示
-        document.querySelectorAll('.group-toggle:not(.edit-only)').forEach(btn => {
+        function applyGroupToggleEvents(btn) {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const section = btn.dataset.toggle;
                 const container = document.querySelector(`[data-cards="${section}"]`);
+                if (!container) return;
                 const isHidden = container.style.display === 'none';
-
                 container.style.display = isHidden ? '' : 'none';
-                btn.textContent = isHidden ? '表示' : '非表示';
-
-                if (isHidden) {
-                    config.hiddenSections.delete(section);
-                } else {
-                    config.hiddenSections.add(section);
-                }
-                saveConfig(config);
+                btn.textContent = isHidden ? '非表示' : '表示';
+                if (isHidden) config.hiddenSections.delete(section);
+                else config.hiddenSections.add(section);
+                saveConfig();
             });
+        }
 
-            // 初期状態を設定
-            const section = btn.dataset.toggle;
-            if (config.hiddenSections.has(section)) {
-                const container = document.querySelector(`[data-cards="${section}"]`);
-                container.style.display = 'none';
-                btn.textContent = '非表示';
-            }
-        });
-
-        // グループ削除ボタン
-        document.querySelectorAll('.group-toggle.edit-only').forEach(btn => {
+        function applyGroupDeleteEvents(btn) {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                const section = btn.dataset.toggle;
-                const sectionEl = document.querySelector(`[data-section="${section}"]`);
-
-                if (confirm(`「${config.sectionNames[section] || section}」を削除してもよろしいですか？`)) {
+                const section = btn.dataset.section;
+                const sectionEl = document.querySelector(`section[data-section="${section}"]`);
+                const label = config.sectionNames[section] || sectionEl.querySelector('.section-title').textContent;
+                if (confirm(`「${label}」を削除してもよろしいですか？（中のアプリも非表示になります）`)) {
                     sectionEl.style.display = 'none';
-                    config.hiddenSections.add(section);
-                    saveConfig(config);
+                    config.deletedSections.add(section);
+                    saveConfig();
                 }
             });
-        });
+        }
 
-        // グループ名を編集可能にする
-        document.querySelectorAll('.section-title').forEach(title => {
-            title.addEventListener('click', function() {
+        function makeSectionTitleEditable(titleEl) {
+            titleEl.addEventListener('click', function() {
                 if (!isEditMode) return;
-
                 const sectionEl = this.closest('[data-section]');
                 const section = sectionEl.dataset.section;
-                const currentName = config.sectionNames[section] || this.textContent;
+                const currentName = this.textContent;
 
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.value = currentName;
                 input.className = 'section-title-input px-1 bg-gray-50 border border-indigo-300 rounded text-xs font-semibold text-slate-400 uppercase tracking-widest';
-
                 this.replaceWith(input);
                 input.focus();
                 input.select();
 
-                function save() {
-                    config.sectionNames[section] = input.value;
+                const finish = () => {
+                    const newName = input.value.trim() || currentName;
+                    config.sectionNames[section] = newName;
                     const newTitle = document.createElement('h2');
-                    newTitle.className = 'text-xs font-semibold text-slate-400 uppercase tracking-widest section-title cursor-pointer';
-                    newTitle.textContent = input.value;
+                    newTitle.className = 'text-xs font-semibold text-slate-400 uppercase tracking-widest section-title editable';
+                    newTitle.textContent = newName;
                     input.replaceWith(newTitle);
-                    newTitle.addEventListener('click', arguments.callee);
-                    saveConfig(config);
-                }
-
-                input.addEventListener('blur', save);
-                input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') save();
-                });
+                    makeSectionTitleEditable(newTitle);
+                    saveConfig();
+                };
+                input.addEventListener('blur', finish);
+                input.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); input.blur(); } });
             });
-        });
+        }
 
-        // グループ追加
-        document.getElementById('addGroupBtn').addEventListener('click', () => {
-            const name = prompt('新しいグループの名前を入力してください:');
-            if (!name) return;
-
-            const section = `custom_${Date.now()}`;
-            config.sectionNames[section] = name;
-
+        function createSectionElement(section, name, restoring) {
             const newSection = document.createElement('section');
             newSection.className = 'mb-7';
             newSection.dataset.section = section;
-            newSection.dataset.label = name;
             newSection.innerHTML = `
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
                         <div class="w-1.5 h-4 rounded-full bg-purple-400"></div>
-                        <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest section-title cursor-pointer">${name}</h2>
+                        <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest section-title editable">${name}</h2>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle edit-only" data-toggle="${section}" title="削除">✕</button>
-                        <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="${section}">表示</button>
+                        <button class="text-xs text-slate-400 hover:text-red-500 group-delete edit-only${isEditMode ? '' : ' hidden'}" data-section="${section}" title="グループ削除">削除</button>
+                        <button class="text-xs text-slate-400 hover:text-slate-600 group-toggle" data-toggle="${section}">非表示</button>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" data-cards="${section}"></div>
             `;
-
             document.getElementById('allSections').appendChild(newSection);
-
-            // イベント設定
-            newSection.querySelector('.section-title').addEventListener('click', function() {
-                if (!isEditMode) return;
-                const sectionEl = this.closest('[data-section]');
-                const sec = sectionEl.dataset.section;
-                const currentName = config.sectionNames[sec];
-
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.value = currentName;
-                input.className = 'section-title-input px-1 bg-gray-50 border border-indigo-300 rounded text-xs font-semibold text-slate-400 uppercase tracking-widest';
-
-                this.replaceWith(input);
-                input.focus();
-                input.select();
-
-                function save() {
-                    config.sectionNames[sec] = input.value;
-                    const newTitle = document.createElement('h2');
-                    newTitle.className = 'text-xs font-semibold text-slate-400 uppercase tracking-widest section-title cursor-pointer';
-                    newTitle.textContent = input.value;
-                    input.replaceWith(newTitle);
-                    newTitle.addEventListener('click', arguments.callee);
-                    saveConfig(config);
-                }
-
-                input.addEventListener('blur', save);
-                input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') save();
-                });
-            });
-
-            newSection.querySelector('.group-toggle:not(.edit-only)').addEventListener('click', (e) => {
-                const container = newSection.querySelector(`[data-cards="${section}"]`);
-                const isHidden = container.style.display === 'none';
-                container.style.display = isHidden ? '' : 'none';
-                e.target.textContent = isHidden ? '表示' : '非表示';
-
-                if (isHidden) {
-                    config.hiddenSections.delete(section);
-                } else {
-                    config.hiddenSections.add(section);
-                }
-                saveConfig(config);
-            });
-
-            newSection.querySelector('.group-toggle.edit-only').addEventListener('click', (e) => {
-                if (confirm(`「${config.sectionNames[section]}」を削除してもよろしいですか？`)) {
-                    newSection.style.display = 'none';
-                    config.hiddenSections.add(section);
-                    saveConfig(config);
-                }
-            });
-
-            saveConfig(config);
-        });
-
-        // 編集モード
-        const editBtn = document.getElementById('editBtn');
-        const addGroupBtn = document.getElementById('addGroupBtn');
-        let isEditMode = false;
-
-        editBtn.addEventListener('click', () => {
-            isEditMode = !isEditMode;
-            document.querySelectorAll('[draggable]').forEach(el => {
-                el.draggable = isEditMode;
-                el.style.cursor = isEditMode ? 'grab' : 'default';
-            });
-            document.querySelectorAll('.edit-only').forEach(el => {
-                el.classList.toggle('hidden', !isEditMode);
-            });
-            editBtn.classList.toggle('bg-indigo-50', isEditMode);
-            editBtn.classList.toggle('text-indigo-600', isEditMode);
-            addGroupBtn.classList.toggle('hidden', !isEditMode);
-        });
-
-        // レイアウト保存
-        function saveLayout() {
-            const layout = {};
-            document.querySelectorAll('[data-cards]').forEach(container => {
-                const section = container.dataset.cards;
-                layout[section] = Array.from(container.querySelectorAll('[data-name]')).map(card => card.dataset.name);
-            });
-            config.layout = layout;
-            saveConfig(config);
+            makeSectionTitleEditable(newSection.querySelector('.section-title'));
+            applyGroupToggleEvents(newSection.querySelector('.group-toggle'));
+            applyGroupDeleteEvents(newSection.querySelector('.group-delete'));
+            if (!restoring && !config.customSections.includes(section)) {
+                config.customSections.push(section);
+            }
+            return newSection;
         }
 
-        // レイアウト復元
+        // 全カードにイベント初期化
+        document.querySelectorAll('.card-hover').forEach(initCardEvents);
+        document.querySelectorAll('.group-toggle').forEach(applyGroupToggleEvents);
+        document.querySelectorAll('.group-delete').forEach(applyGroupDeleteEvents);
+        document.querySelectorAll('.section-title').forEach(el => {
+            el.classList.add('editable');
+            makeSectionTitleEditable(el);
+        });
+
+        // カスタムセクションを復元
+        (config.customSections || []).forEach(section => {
+            if (!document.querySelector(`[data-section="${section}"]`)) {
+                createSectionElement(section, config.sectionNames[section] || section, true);
+            }
+        });
+
+        // ピンを復元
+        Object.entries(config.pins).forEach(([name, origSection]) => {
+            const card = document.querySelector(`[data-name="${CSS.escape(name)}"]`);
+            if (card) {
+                card.dataset.originalSection = origSection;
+                card.dataset.section = 'favorites';
+                const favContainer = document.querySelector('[data-cards="favorites"]');
+                favContainer.appendChild(card);
+                const pinBtn = card.querySelector('.pin-btn');
+                if (pinBtn) pinBtn.classList.add('text-amber-500');
+                document.getElementById('favoriteSection').classList.remove('hidden');
+            }
+        });
+
+        // 非表示アプリを復元
+        config.hiddenApps.forEach(name => {
+            const card = document.querySelector(`[data-name="${CSS.escape(name)}"]`);
+            if (card) {
+                card.classList.add('hidden-card');
+                const visBtn = card.querySelector('.visibility-btn');
+                if (visBtn) visBtn.classList.add('text-red-500');
+            }
+        });
+
+        // 非表示グループを復元
+        config.hiddenSections.forEach(section => {
+            const container = document.querySelector(`[data-cards="${section}"]`);
+            const btn = document.querySelector(`.group-toggle[data-toggle="${section}"]`);
+            if (container) container.style.display = 'none';
+            if (btn) btn.textContent = '表示';
+        });
+
+        // 削除グループを復元
+        config.deletedSections.forEach(section => {
+            const sectionEl = document.querySelector(`section[data-section="${section}"]`);
+            if (sectionEl) sectionEl.style.display = 'none';
+        });
+
+        // グループ名を復元
+        Object.entries(config.sectionNames).forEach(([section, name]) => {
+            const sectionEl = document.querySelector(`section[data-section="${section}"]`);
+            if (sectionEl) {
+                const titleEl = sectionEl.querySelector('.section-title');
+                if (titleEl) titleEl.textContent = name;
+            }
+        });
+
+        // レイアウト復元（カードの並び順）
         function loadLayout() {
             Object.entries(config.layout || {}).forEach(([section, names]) => {
                 const container = document.querySelector(`[data-cards="${section}"]`);
                 if (!container) return;
-
-                const cards = names.map(name => {
-                    return Array.from(document.querySelectorAll(`[data-name="${name}"]`)).find(c => !c.dataset.originalSection || c.dataset.section === section);
-                }).filter(Boolean);
-
-                cards.forEach(card => container.appendChild(card));
+                names.forEach(name => {
+                    const card = document.querySelector(`[data-name="${CSS.escape(name)}"][data-section="${section}"]`);
+                    if (card) container.appendChild(card);
+                });
             });
         }
+        loadLayout();
 
-        function updateCardMenus() {
-            document.querySelectorAll('.pin-btn').forEach(btn => {
-                const card = btn.closest('.card-hover');
-                if (card.dataset.section === 'favorites') {
-                    btn.classList.add('text-amber-500');
-                } else {
-                    btn.classList.remove('text-amber-500');
-                }
+        function saveLayout() {
+            const layout = {};
+            document.querySelectorAll('[data-cards]').forEach(container => {
+                const section = container.dataset.cards;
+                layout[section] = Array.from(container.querySelectorAll('[data-name]')).map(c => c.dataset.name);
             });
+            config.layout = layout;
+            saveConfig();
         }
 
-        // 検索機能
+        // グループ追加
+        document.getElementById('addGroupBtn').addEventListener('click', () => {
+            const name = prompt('新しいグループの名前を入力してください:');
+            if (!name || !name.trim()) return;
+            const section = `custom_${Date.now()}`;
+            config.sectionNames[section] = name.trim();
+            createSectionElement(section, name.trim(), false);
+            saveConfig();
+        });
+
+        // 編集モード切り替え
+        const editBtn = document.getElementById('editBtn');
+        const addGroupBtn = document.getElementById('addGroupBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        editBtn.addEventListener('click', () => {
+            isEditMode = !isEditMode;
+            document.querySelectorAll('.card-hover').forEach(el => {
+                el.draggable = isEditMode;
+                el.style.cursor = isEditMode ? 'grab' : 'pointer';
+            });
+            document.querySelectorAll('.edit-only').forEach(el => el.classList.toggle('hidden', !isEditMode));
+            document.querySelectorAll('.section-title').forEach(el => el.classList.toggle('editable', isEditMode));
+            editBtn.classList.toggle('bg-indigo-50', isEditMode);
+            editBtn.classList.toggle('text-indigo-600', isEditMode);
+            addGroupBtn.classList.toggle('hidden', !isEditMode);
+            resetBtn.classList.toggle('hidden', !isEditMode);
+        });
+
+        // リセット
+        resetBtn.addEventListener('click', () => {
+            if (confirm('すべてのカスタマイズ設定（表示/非表示、並び順、グループ名、追加グループ）をリセットしますか？')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        });
+
+        // 検索
         const searchInput = document.getElementById('searchInput');
         const noResults = document.getElementById('noResults');
         const searchQuery = document.getElementById('searchQuery');
 
         searchInput.addEventListener('input', () => {
             const q = searchInput.value.trim().toLowerCase();
-            const sections = document.querySelectorAll('[data-section]');
+            const sections = document.querySelectorAll('#allSections > section');
             let total = 0;
 
             sections.forEach(section => {
+                if (section.style.display === 'none' && !q) return;
                 const cards = section.querySelectorAll('[data-name]');
                 let visible = 0;
                 cards.forEach(card => {
@@ -667,17 +1101,37 @@
                     card.style.display = match ? '' : 'none';
                     if (match) visible++;
                 });
-                section.style.display = visible > 0 ? '' : 'none';
+                if (q) {
+                    section.style.display = visible > 0 ? '' : 'none';
+                }
                 total += visible;
             });
 
             noResults.classList.toggle('hidden', total > 0 || !q);
             searchQuery.textContent = searchInput.value.trim();
+
+            if (!q) {
+                // 検索クリア時は保存済みの表示状態に戻す
+                sections.forEach(section => {
+                    const sec = section.dataset.section;
+                    if (config.deletedSections.has(sec)) {
+                        section.style.display = 'none';
+                    } else {
+                        section.style.display = '';
+                    }
+                    const container = section.querySelector('[data-cards]');
+                    if (container) {
+                        container.style.display = config.hiddenSections.has(sec) ? 'none' : '';
+                        container.querySelectorAll('[data-name]').forEach(c => c.style.display = '');
+                    }
+                });
+            }
         });
 
-        // 初期化
-        loadLayout();
-        updateCardMenus();
+        // カウント更新
+        const totalApps = document.querySelectorAll('[data-name]').length;
+        document.getElementById('appCount').textContent = totalApps;
+        document.getElementById('footerCount').textContent = totalApps;
     </script>
 
 </body>
